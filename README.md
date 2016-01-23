@@ -1,5 +1,4 @@
-?What is .NET ToolStrip Customizer?
-**********************************
+## What is .NET ToolStrip Customizer ##
 
 .NET ToolStrip Customizer is a lightweight and easy to use application 
 designed to help you generate custom color tables (in C# and VB.NET) 
@@ -10,8 +9,7 @@ can use in your own WinForms applications: ?Office 2007?, ?Office 2003?,
 
 This application is licensed under the New BSD License (BSD). 
 
-Why I Need This?
-****************
+## Why I Need This ##
 
 At present, there is no free alternative for .NET WinForms standard 
 ToolStrip controls. The main problem is that these controls have only 
@@ -24,13 +22,11 @@ have more than 50 properties (for each color), and it is very difficult to
 fill all of them with colors (often in ARGB format) by hand. This tool can 
 automate this process and generate ColorTable classes for your projects.
 
-System Requirements
-*******************
+## System Requirements ##
 
-OS Windows 2000/XP/Vista/7/8
+OS Windows 2000/XP/Vista/7/8/10
 .NET Framework 2.0
 
-More Information and Feedback
-*****************************
+## More Information and Feedback ##
 
 Visit http://toolstripcustomizer.codeplex.com/
