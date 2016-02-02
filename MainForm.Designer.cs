@@ -115,6 +115,7 @@ namespace ToolStripCustomizer
       this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
       this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
       this.searchWorker = new System.ComponentModel.BackgroundWorker();
+      this.screenColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
       toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
       toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -753,8 +754,8 @@ namespace ToolStripCustomizer
       // 
       // toolStripContainer.TopToolStripPanel
       // 
-      this.toolStripContainer.TopToolStripPanel.Controls.Add(this.mainToolStrip);
       this.toolStripContainer.TopToolStripPanel.Controls.Add(this.previewToolStrip);
+      this.toolStripContainer.TopToolStripPanel.Controls.Add(this.mainToolStrip);
       // 
       // gridView
       // 
@@ -827,11 +828,12 @@ namespace ToolStripCustomizer
             toolStripSeparator3,
             this.fromKnownColorMenuItem,
             this.alphaMenuItem,
+            this.screenColorMenuItem,
             toolStripMenuItem1,
             resetMenuItem,
             clearMenuItem});
       this.rowContextMenu.Name = "rowContextMenu";
-      this.rowContextMenu.Size = new System.Drawing.Size(165, 170);
+      this.rowContextMenu.Size = new System.Drawing.Size(165, 214);
       this.rowContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.RowContextMenuOpening);
       // 
       // copyPopupItem
@@ -909,6 +911,13 @@ namespace ToolStripCustomizer
       this.searchWorker.WorkerSupportsCancellation = true;
       this.searchWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.SearchWorkerDoWork);
       this.searchWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.OnSearchWorkerProgressChanged);
+      // 
+      // screenColorMenuItem
+      // 
+      this.screenColorMenuItem.Name = "screenColorMenuItem";
+      this.screenColorMenuItem.Size = new System.Drawing.Size(164, 22);
+      this.screenColorMenuItem.Text = "Scree&n Color";
+      this.screenColorMenuItem.Click += new System.EventHandler(this.screenColorMenuItem_Click);
       // 
       // MainForm
       // 
@@ -1000,6 +1009,7 @@ namespace ToolStripCustomizer
         private System.Windows.Forms.ToolStripButton colorToolStripButton;
         private System.Windows.Forms.ToolStripMenuItem colorAdjustmentToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-    }
+    private System.Windows.Forms.ToolStripMenuItem screenColorMenuItem;
+  }
 }
 

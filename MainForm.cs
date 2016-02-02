@@ -272,6 +272,13 @@ namespace ToolStripCustomizer
             }        
         }        
 
+        private void changeColor(Control c, Color color)
+        {
+            c.ForeColor = color;
+            foreach (Control ctl in c.Controls)
+                changeColor(ctl, color);
+        }
+
         private void UpdateRow(int rowIndex, Color color)
         {
             var group = GetRowColorGroup(rowIndex);
@@ -281,7 +288,8 @@ namespace ToolStripCustomizer
             switch (group)
             {
                 case ColorTableGroup.FormForeColor:
-                    ForeColor = colorDialog.Color;
+                    changeColor(this, colorDialog.Color);
+                    menuStrip.ForeColor = colorDialog.Color;
                     gridView.ForeColor = colorDialog.Color;
                     break;
                 case ColorTableGroup.FormBackColor:
@@ -571,9 +579,7 @@ namespace ToolStripCustomizer
         private void OptionsMenuItemClick(object sender, EventArgs e)
         {
             using (var options = new OptionsForm())
-            {
                 options.ShowDialog(this);
-            }
         }
 
         private void MainFormLoad(object sender, EventArgs e)
@@ -716,5 +722,29 @@ namespace ToolStripCustomizer
         }
 
     #endregion
+
+    private void screenColorMenuItem_Click(object sender, EventArgs e)
+    {
+      using (var form = new ScreenColorPickerForm{ ForeColor = this.ForeColor, BackColor = this.BackColor })
+      try {
+        this.WindowState = FormWindowState.Minimized;
+
+        if (form.ShowDialog(this) == DialogResult.OK)
+        {
+          foreach (DataGridViewRow row in gridView.SelectedRows)
+          {
+            Color color = GetRowColor(row.Index);
+            Color newColor = form.SelectedColor;
+            var group = GetRowColorGroup(row.Index);
+            SetRow(row.Index, group, newColor);
+            Renderer.ColorTable[group] = newColor;
+          }
+        }
+      }
+      finally { 
+        this.WindowState = FormWindowState.Normal;
+        this.Activate();
+      }
+    }
   }
 }
