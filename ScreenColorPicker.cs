@@ -33,14 +33,12 @@ namespace ToolStripCustomizer
         new MagnifyingGlass.MakingScreenshotDelegate(MagnifyingGlass_AfterMakingScreenshot);
 
       SelectedColor = panel2.BackColor;
-      m_MouseHook = new GlobalHook(
-        p => !btnOk.Bounds.Contains(p) && !btnCancel.Bounds.Contains(p),
-        p => this.SelectColor(), true);
     }
 
+    private   bool          m_Stopped = false;
     protected override void OnClosed(EventArgs e)
     {
-      m_MouseHook.Dispose();
+      m_Stopped = true;
       base.OnClosed(e);
     }
 
@@ -50,13 +48,10 @@ namespace ToolStripCustomizer
     /// <param name="disposing">True, wenn verwaltete Ressourcen gelöscht werden sollen; andernfalls False.</param>
     protected override void Dispose(bool disposing)
     {
-      m_MouseHook.Dispose();
       if (disposing && (components != null))
         components.Dispose();
       base.Dispose(disposing);
     }
-
-    private readonly GlobalHook m_MouseHook;
 
     #endregion
 
@@ -328,7 +323,7 @@ namespace ToolStripCustomizer
     private void SelectColor()
     {
       // Memorize the selection if we are still capturing the color off the screen
-      if (m_MouseHook.Enabled)
+      if (!m_Stopped)
         SelectedColor  = panel1.BackColor;
       // Show the selected color and properties
       panel2.BackColor = panel1.BackColor;
@@ -951,7 +946,7 @@ namespace ToolStripCustomizer
       // Show the moving glass
       if (GlassForm != null && IsEnabled && UseMovingGlass)
       {
-        GlassForm.Show();
+        GlassForm.Show(MousePosition);
       }
     }
 
@@ -1090,10 +1085,11 @@ namespace ToolStripCustomizer
     /// <summary>
     /// Show the window and enable the timer
     /// </summary>
-    public new void Show()
+    /// <param name="mousePosition"></param>
+    public new void Show(Point mousePosition)
     {
       MagnifyingGlass.MakeScreenshot();
-      Cursor.Position = new Point(0, 0);
+      Cursor.Position = mousePosition;
       base.Show();
       MagnifyingGlass.UpdateTimer.Start();
       Cursor.Hide();
@@ -1128,140 +1124,6 @@ namespace ToolStripCustomizer
     {
       get { return m_MagnifyingGlass; }
     }
-  }
-
-  #endregion
-
-  #region Global Hook
-
-  internal class GlobalHook : IDisposable
-  {
-    public GlobalHook(Func<Point,bool> canCapture, ClickAction action, bool captureClick = true)
-    {
-      m_CanCapture = canCapture;
-      m_HookID = SetHook(this.HookCallback);
-      m_OnClick += action;
-      m_CaptureClick = captureClick;
-    }
-
-    public bool Enabled { get { return m_HookID != IntPtr.Zero;  } }
-
-    public delegate void ClickAction(Point x);
-    private event ClickAction m_OnClick;
-    private bool              m_CaptureClick;
-    private IntPtr            m_HookID = IntPtr.Zero;
-    private Func<Point, bool> m_CanCapture;
-
-    private static IntPtr SetHook(LowLevelMouseProc proc)
-    {
-      using (Process curProcess = Process.GetCurrentProcess())
-      using (ProcessModule curModule = curProcess.MainModule)
-      {
-        return SetWindowsHookEx(WH_MOUSE_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
-      }
-    }
-
-    private delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-    private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
-    {
-      if (nCode >= 0 && MouseMessages.WM_LBUTTONDOWN == (MouseMessages)wParam && lParam != IntPtr.Zero)
-      {
-        var hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof (MSLLHOOKSTRUCT));
-        var point      = new Point(hookStruct.pt.x, hookStruct.pt.y);
-        if (m_CanCapture != null && m_CanCapture(point))
-        {
-          m_OnClick(point);
-          //if (m_CaptureClick)
-          //  return new IntPtr(-1);
-        }
-      }
-      return CallNextHookEx(m_HookID, nCode, wParam, lParam);
-    }
-
-    private const int WH_MOUSE_LL = 14;
-
-    private enum MouseMessages
-    {
-      WM_LBUTTONDOWN = 0x0201,
-      WM_LBUTTONUP   = 0x0202,
-      WM_MOUSEMOVE   = 0x0200,
-      WM_MOUSEWHEEL  = 0x020A,
-      WM_RBUTTONDOWN = 0x0204,
-      WM_RBUTTONUP   = 0x0205
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct POINT
-    {
-      public int x;
-      public int y;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct MSLLHOOKSTRUCT
-    {
-      public POINT pt;
-      public uint mouseData;
-      public uint flags;
-      public uint time;
-      public IntPtr dwExtraInfo;
-    }
-
-    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    private static extern IntPtr SetWindowsHookEx(int idHook,
-                                                  LowLevelMouseProc lpfn, IntPtr hMod,
-                                                  uint dwThreadId);
-
-    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool UnhookWindowsHookEx(IntPtr hhk);
-
-    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
-                                                IntPtr wParam, IntPtr lParam);
-
-    [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    private static extern IntPtr GetModuleHandle(string lpModuleName);
-
-    #region IDisposable Support
-    private bool disposedValue = false; // To detect redundant calls
-
-    protected virtual void Dispose(bool disposing)
-    {
-      if (!disposedValue)
-      {
-        if (disposing)
-        {
-          // Dispose managed state (managed objects).
-        }
-
-        if (m_HookID != IntPtr.Zero)
-        {
-          // Free unmanaged resources (unmanaged objects) and override a finalizer below.
-          UnhookWindowsHookEx(m_HookID);
-          m_HookID = IntPtr.Zero;
-        }
-
-        disposedValue = true;
-      }
-    }
-
-    // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-    ~GlobalHook() {
-      // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-      Dispose(false);
-    }
-
-    // This code added to correctly implement the disposable pattern.
-    public void Dispose()
-    {
-      // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-      Dispose(true);
-      // TODO: uncomment the following line if the finalizer is overridden above.
-      GC.SuppressFinalize(this);
-    }
-    #endregion
   }
 
   #endregion
