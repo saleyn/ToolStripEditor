@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace ToolStripCustomizer
 {
-
   /// <summary>
   /// Custom form that gives the user ability to pick a color on the screen.
   /// Sample usage:
@@ -15,27 +13,30 @@ namespace ToolStripCustomizer
   /// Application.Run(new ScreenColorPickerForm() {ForeColor = Color.Black, BackColor = Color.LemonChiffon});
   /// </code>
   /// </summary>
+  #region ScreenColorPickerForm
   public class ScreenColorPickerForm : Form
   {
     #region Ctor
+
     public ScreenColorPickerForm()
     {
       InitializeComponent();
       magnifyingGlass1.UpdateTimer.Start();
-      magnifyingGlass1.GlassForm.MagnifyingGlass.Click +=
+      magnifyingGlass1.MovingGlassForm.MagnifyingGlass.Click +=
         new EventHandler(MagnifyingGlass_Click);
-      magnifyingGlass1.GlassForm.VisibleChanged +=
+      magnifyingGlass1.MovingGlassForm.VisibleChanged +=
         new EventHandler(MovingGlass_VisibleChanged);
-      magnifyingGlass1.GlassForm.MagnifyingGlass.BeforeMakingScreenshot +=
+      magnifyingGlass1.MovingGlassForm.MagnifyingGlass.BeforeMakingScreenshot +=
         new MagnifyingGlass.MakingScreenshotDelegate(
           MagnifyingGlass_BeforeMakingScreenshot);
-      magnifyingGlass1.GlassForm.MagnifyingGlass.AfterMakingScreenshot +=
+      magnifyingGlass1.MovingGlassForm.MagnifyingGlass.AfterMakingScreenshot +=
         new MagnifyingGlass.MakingScreenshotDelegate(MagnifyingGlass_AfterMakingScreenshot);
 
       SelectedColor = panel2.BackColor;
     }
 
-    private   bool          m_Stopped = false;
+    private bool m_Stopped = false;
+
     protected override void OnClosed(EventArgs e)
     {
       m_Stopped = true;
@@ -53,7 +54,7 @@ namespace ToolStripCustomizer
       base.Dispose(disposing);
     }
 
-    #endregion
+    #endregion Ctor
 
     #region Fields
 
@@ -85,7 +86,7 @@ namespace ToolStripCustomizer
     /// </summary>
     public Color SelectedColor { get; private set; }
 
-    #endregion
+    #endregion Fields
 
     #region Initialization
 
@@ -108,17 +109,17 @@ namespace ToolStripCustomizer
       this.btnCancel = new System.Windows.Forms.Button();
       this.groupBox1.SuspendLayout();
       this.SuspendLayout();
-      // 
+      //
       // panel1
-      // 
+      //
       this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
       this.panel1.Location = new System.Drawing.Point(123, 12);
       this.panel1.Name = "panel1";
       this.panel1.Size = new System.Drawing.Size(105, 105);
       this.panel1.TabIndex = 1;
-      // 
+      //
       // checkBox1
-      // 
+      //
       this.checkBox1.AutoSize = true;
       this.checkBox1.Checked = true;
       this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -129,9 +130,9 @@ namespace ToolStripCustomizer
       this.checkBox1.Text = "Show the current pixel";
       this.checkBox1.UseVisualStyleBackColor = true;
       this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-      // 
+      //
       // checkBox2
-      // 
+      //
       this.checkBox2.AutoSize = true;
       this.checkBox2.Checked = true;
       this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -142,9 +143,9 @@ namespace ToolStripCustomizer
       this.checkBox2.Text = "Show the current cursor position";
       this.checkBox2.UseVisualStyleBackColor = true;
       this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
-      // 
+      //
       // groupBox1
-      // 
+      //
       this.groupBox1.Controls.Add(this.label3);
       this.groupBox1.Controls.Add(this.label2);
       this.groupBox1.Controls.Add(this.label1);
@@ -156,41 +157,41 @@ namespace ToolStripCustomizer
       this.groupBox1.TabIndex = 4;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Last selected color";
-      // 
+      //
       // label3
-      // 
+      //
       this.label3.AutoSize = true;
       this.label3.Location = new System.Drawing.Point(6, 45);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(0, 13);
       this.label3.TabIndex = 3;
-      // 
+      //
       // label2
-      // 
+      //
       this.label2.AutoSize = true;
       this.label2.Location = new System.Drawing.Point(6, 32);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(0, 13);
       this.label2.TabIndex = 2;
-      // 
+      //
       // label1
-      // 
+      //
       this.label1.AutoSize = true;
       this.label1.Location = new System.Drawing.Point(6, 19);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(0, 13);
       this.label1.TabIndex = 1;
-      // 
+      //
       // panel2
-      // 
+      //
       this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
       this.panel2.Location = new System.Drawing.Point(111, 19);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(99, 39);
       this.panel2.TabIndex = 0;
-      // 
+      //
       // magnifyingGlass1
-      // 
+      //
       this.magnifyingGlass1.BackColor = System.Drawing.Color.Black;
       this.magnifyingGlass1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
       this.magnifyingGlass1.Cursor = System.Windows.Forms.Cursors.SizeAll;
@@ -207,9 +208,9 @@ namespace ToolStripCustomizer
       this.magnifyingGlass1.TabIndex = 0;
       this.magnifyingGlass1.UseMovingGlass = true;
       this.magnifyingGlass1.DisplayUpdated += new ToolStripCustomizer.MagnifyingGlass.DisplayUpdatedDelegate(this.magnifyingGlass1_DisplayUpdated);
-      // 
+      //
       // btnOk
-      // 
+      //
       this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
       this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.btnOk.ForeColor = System.Drawing.Color.LightGray;
@@ -219,9 +220,9 @@ namespace ToolStripCustomizer
       this.btnOk.TabIndex = 5;
       this.btnOk.Text = "&Ok";
       this.btnOk.UseVisualStyleBackColor = true;
-      // 
+      //
       // btnCancel
-      // 
+      //
       this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
       this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.btnCancel.ForeColor = System.Drawing.Color.LightGray;
@@ -231,13 +232,12 @@ namespace ToolStripCustomizer
       this.btnCancel.TabIndex = 6;
       this.btnCancel.Text = "&Cancel";
       this.btnCancel.UseVisualStyleBackColor = true;
-      // 
+      //
       // ScreenColorPickerForm
-      // 
+      //
       this.AcceptButton = this.btnOk;
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
       this.ClientSize = new System.Drawing.Size(240, 290);
       this.Controls.Add(this.btnCancel);
       this.Controls.Add(this.btnOk);
@@ -246,8 +246,9 @@ namespace ToolStripCustomizer
       this.Controls.Add(this.checkBox1);
       this.Controls.Add(this.panel1);
       this.Controls.Add(this.magnifyingGlass1);
-      this.ForeColor = System.Drawing.Color.LightGray;
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+      this.BackColor = Color.FromArgb(255, 45, 45, 48);
+      this.ForeColor = Color.LightGray;
       this.MinimizeBox = false;
       this.Name = "ScreenColorPickerForm";
       this.ShowIcon = false;
@@ -258,12 +259,12 @@ namespace ToolStripCustomizer
       this.groupBox1.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
-
     }
 
-    #endregion
+    #endregion Initialization
 
     #region Private
+
     /// <summary>
     /// Erforderliche Designervariable.
     /// </summary>
@@ -284,7 +285,7 @@ namespace ToolStripCustomizer
     private void MovingGlass_VisibleChanged(object sender, EventArgs e)
     {
       // Make this not the top window if the moving glass is shown because it will hide the glass display otherwise
-      TopMost = !magnifyingGlass1.GlassForm.Visible;
+      TopMost = !magnifyingGlass1.MovingGlassForm.Visible;
     }
 
     private void MagnifyingGlass_Click(object sender, EventArgs e)
@@ -314,7 +315,7 @@ namespace ToolStripCustomizer
     private void GUI_Deactivate(object sender, EventArgs e)
     {
       // Select the current color if the form lost the focus
-      if (!magnifyingGlass1.GlassForm.Visible)
+      if (!magnifyingGlass1.MovingGlassForm.Visible)
       {
         SelectColor();
       }
@@ -324,7 +325,7 @@ namespace ToolStripCustomizer
     {
       // Memorize the selection if we are still capturing the color off the screen
       if (!m_Stopped)
-        SelectedColor  = panel1.BackColor;
+        SelectedColor = panel1.BackColor;
       // Show the selected color and properties
       panel2.BackColor = panel1.BackColor;
       label1.Text = "R: " + panel2.BackColor.R.ToString();
@@ -346,10 +347,12 @@ namespace ToolStripCustomizer
       Hide();
     }
 
-    #endregion
+    #endregion Private
   }
+  #endregion
 
   #region -- MagnifyingGlass User Control --
+
   /// <summary>
   /// A fixed magnifying glass for placing on a control
   /// </summary>
@@ -363,18 +366,20 @@ namespace ToolStripCustomizer
     private string _PosFormat = "#x ; #y";
     private bool _FollowCursor = false;
     internal Bitmap _ScreenShot = null;
-    internal MagnifyingGlassForm _DisplayForm = null;
+    internal MagnifyingGlassForm m_StationaryGlassForm = null;
     private Point _LastPosition = Point.Empty;
-    private MagnifyingGlassForm m_GlassForm = null;
+    private MagnifyingGlassForm m_MovingGlassForm = null;
     private ContentAlignment _PosAlign = ContentAlignment.TopLeft;
     private bool _UseMovingGlass = false;
+    private static bool _UseWin32Api = false;
 
     /// <summary>
     /// Instance of the magnifying glass with moving glass, if the user clicks on this one
     /// </summary>
     public MagnifyingGlass()
-      : this(true)
-    { }
+        : this(true)
+    {
+    }
 
     /// <summary>
     /// Instance of the magnifying glass
@@ -385,11 +390,10 @@ namespace ToolStripCustomizer
       if (movingGlass)
       {
         // Moving glass is enabled
-        m_GlassForm = new MagnifyingGlassForm();
-        GlassForm.MagnifyingGlass.ShowPosition = false;
-        GlassForm.MagnifyingGlass.DisplayUpdated +=
-          new DisplayUpdatedDelegate(MagnifyingGlass_DisplayUpdated);
-        GlassForm.MagnifyingGlass.Click += new EventHandler(_MovingGlass_Click);
+        m_MovingGlassForm = new MagnifyingGlassForm();
+        MovingGlassForm.MagnifyingGlass.ShowPosition = false;
+        MovingGlassForm.MagnifyingGlass.DisplayUpdated += new DisplayUpdatedDelegate(MagnifyingGlass_DisplayUpdated);
+        MovingGlassForm.MagnifyingGlass.Click += new EventHandler(_MovingGlass_Click);
         MouseWheel += new MouseEventHandler(MagnifyingGlass_MouseWheel);
         Cursor = Cursors.SizeAll;
         UseMovingGlass = true;
@@ -401,12 +405,13 @@ namespace ToolStripCustomizer
 
     #region Properties
 
-    [Description(
-      "Magnifying ratio (calculate PixelRange*PixelSize*2+PixelSize for the final control size, min. 3)"
-      )]
+    [Description("Magnifying ratio (calculate PixelRange*PixelSize*2+PixelSize for the final control size, min. 3)")]
     public int PixelSize
     {
-      get { return _PixelSize; }
+      get
+      {
+        return _PixelSize;
+      }
       set
       {
         int temp = value;
@@ -425,54 +430,57 @@ namespace ToolStripCustomizer
       }
     }
 
-
     [Description("Get/set if the moving glass feature should be used")]
     public bool UseMovingGlass
     {
-      get { return _UseMovingGlass; }
+      get
+      {
+        return _UseMovingGlass;
+      }
       set
       {
-        if (GlassForm != null)
+        if (MovingGlassForm != null)
         {
           _UseMovingGlass = value;
         }
       }
     }
 
-    [Description(
-      "Get/set the align of the position (choose everything, but not the middle")]
+    [Description("Get/set the align of the position (choose everything, but not the middle")]
     public ContentAlignment PosAlign
     {
-      get { return _PosAlign; }
+      get
+      {
+        return _PosAlign;
+      }
       set
       {
-        _PosAlign = (!value.ToString().ToLower().StartsWith("middle"))
-          ? value
-          : ContentAlignment.TopLeft;
+        _PosAlign = (!value.ToString().ToLower().StartsWith("middle")) ? value : ContentAlignment.TopLeft;
       }
     }
 
-    [Description(
-      "Get/set the position display string format (you have to use #x and #y for the corrdinates values)"
-      )]
+    [Description("Get/set the position display string format (you have to use #x and #y for the corrdinates values)")]
     public string PosFormat
     {
-      get { return _PosFormat; }
+      get
+      {
+        return _PosFormat;
+      }
       set
       {
         // Settings without the #x and #y variables will be ignored
-        _PosFormat = (value != null && value != "" && value.Contains("#x") &&
-                      value.Contains("#y"))
-          ? value
-          : "#x ; #y";
+        _PosFormat = (value != null && value != "" && value.Contains("#x") && value.Contains("#y")) ? value : "#x ; #y";
         Invalidate();
       }
     }
 
     [Description("The moving glass, if the user clicks on this")]
-    public MagnifyingGlassForm GlassForm
+    public MagnifyingGlassForm MovingGlassForm
     {
-      get { return m_GlassForm; }
+      get
+      {
+        return m_MovingGlassForm;
+      }
     }
 
     /// <summary>
@@ -481,13 +489,35 @@ namespace ToolStripCustomizer
     [Browsable(false)]
     public bool IsEnabled
     {
-      get { return Visible && Enabled && !DesignMode; }
+      get
+      {
+        return Visible && Enabled && !DesignMode;
+      }
+    }
+
+    /// <summary>
+    /// You may use the Win32 API to get screenshots with alpha / layered windows
+    /// </summary>
+    [Browsable(false)]
+    public static bool UseWin32Api
+    {
+      get
+      {
+        return _UseWin32Api;
+      }
+      set
+      {
+        _UseWin32Api = value;
+      }
     }
 
     [Browsable(false)]
     internal bool FollowCursor
     {
-      get { return _FollowCursor; }
+      get
+      {
+        return _FollowCursor;
+      }
       set
       {
         if (!(_FollowCursor = value))
@@ -502,12 +532,13 @@ namespace ToolStripCustomizer
       }
     }
 
-    [Description(
-      "Get/set the pixel range (calculate PixelRange*PixelSize*2+PixelSize for the final control size, min. 1)"
-      )]
+    [Description("Get/set the pixel range (calculate PixelRange*PixelSize*2+PixelSize for the final control size, min. 1)")]
     public int PixelRange
     {
-      get { return _PixelRange; }
+      get
+      {
+        return _PixelRange;
+      }
       set
       {
         int temp = value;
@@ -524,7 +555,10 @@ namespace ToolStripCustomizer
     [Description("Get/set if the active pixel should be shown")]
     public bool ShowPixel
     {
-      get { return _ShowPixel; }
+      get
+      {
+        return _ShowPixel;
+      }
       set
       {
         _ShowPixel = value;
@@ -535,7 +569,10 @@ namespace ToolStripCustomizer
     [Description("Get/set if the current cursor position should be shown")]
     public bool ShowPosition
     {
-      get { return _ShowPosition; }
+      get
+      {
+        return _ShowPosition;
+      }
       set
       {
         _ShowPosition = value;
@@ -544,17 +581,23 @@ namespace ToolStripCustomizer
     }
 
     [Description("Get the control size (settings will be ignored)")]
-    public new Size Size
+    new public Size Size
     {
       get { return base.Size; }
       set
       {
-        // Settings will be ignored 'cause size will be calculated internally
+        // Settings will be ignored 'cause size will be calculated internal
       }
     }
 
     [Description("Get the timer that updates the display in an interval")]
-    public Timer UpdateTimer { get { return _UpdateTimer; } }
+    public Timer UpdateTimer
+    {
+      get
+      {
+        return _UpdateTimer;
+      }
+    }
 
     [Description("Get the color of the current pixel")]
     public Color PixelColor
@@ -568,24 +611,24 @@ namespace ToolStripCustomizer
           bmp = new Bitmap(1, 1);
           using (Graphics g = Graphics.FromImage(bmp))
           {
-            bool makeScreenshot = !FollowCursor; // Make a real screenshot?
+            bool makeScreenshot = !FollowCursor;// Make a real screenshot?
             if (makeScreenshot)
             {
-              if (GlassForm != null)
+              if (MovingGlassForm != null)
               {
                 //Only make a real screenshot if the moving glass is inactive
-                makeScreenshot &= !GlassForm.Visible;
+                makeScreenshot &= !MovingGlassForm.Visible;
               }
             }
             if (!FollowCursor)
             {
               // Make a real screenshot
-              g.CopyFromScreen(Cursor.Position, new Point(0, 0), bmp.Size);
+              g.DrawImage(MakeScreenshot(new Rectangle(Cursor.Position, bmp.Size)), new Point(0, 0));
             }
             else
             {
               // Use the screen image for the screenshot
-              bool createScreenshot = false; // Did we create a screenshot for this?
+              bool createScreenshot = false;// Did we create a screenshot for this?
               if (FollowCursor)
               {
                 // Create the screenshot only if it wasn't done yet
@@ -594,32 +637,24 @@ namespace ToolStripCustomizer
               else
               {
                 // Create the screenshot only of the moving glass has not done it yet
-                createScreenshot = GlassForm.MagnifyingGlass._ScreenShot == null;
+                createScreenshot = MovingGlassForm.MagnifyingGlass._ScreenShot == null;
               }
               if (createScreenshot)
               {
                 // Create a new screen image
                 MakeScreenshot();
               }
-              if (_ScreenShot != null)
+              if (FollowCursor)
               {
-                if (FollowCursor)
-                {
-                  // We're the moving glass
-                  g.DrawImage(_ScreenShot, new Rectangle(new Point(0, 0), new Size(1, 1)),
-                              new Rectangle(Cursor.Position, new Size(1, 1)),
-                              GraphicsUnit.Pixel);
-                }
-                else if (GlassForm.MagnifyingGlass._ScreenShot != null)
-                {
-                  // Use the moving glasses screenshot
-                  g.DrawImage(GlassForm.MagnifyingGlass._ScreenShot,
-                              new Rectangle(new Point(0, 0), new Size(1, 1)),
-                              new Rectangle(Cursor.Position, new Size(1, 1)),
-                              GraphicsUnit.Pixel);
-                }
+                // We're the moving glass
+                g.DrawImage(_ScreenShot, new Rectangle(new Point(0, 0), new Size(1, 1)), new Rectangle(Cursor.Position, new Size(1, 1)), GraphicsUnit.Pixel);
               }
-              if (createScreenshot && _ScreenShot != null)
+              else
+              {
+                // Use the moving glasses screenshot
+                g.DrawImage(MovingGlassForm.MagnifyingGlass._ScreenShot, new Rectangle(new Point(0, 0), new Size(1, 1)), new Rectangle(Cursor.Position, new Size(1, 1)), GraphicsUnit.Pixel);
+              }
+              if (createScreenshot)
               {
                 // Destroy the screenshot if we only needed to create one for this
                 _ScreenShot.Dispose();
@@ -629,10 +664,6 @@ namespace ToolStripCustomizer
           // Return the pixel color
           return bmp.GetPixel(0, 0);
         }
-        catch
-        {
-          return this.BackColor;
-        }
         finally
         {
           bmp.Dispose();
@@ -640,7 +671,7 @@ namespace ToolStripCustomizer
       }
     }
 
-    #endregion
+    #endregion Properties
 
     #region Painting
 
@@ -662,19 +693,15 @@ namespace ToolStripCustomizer
         return;
       }
       // Set the InterpolationMode to NearestNeighbor to see the pixels clearly
-      e.Graphics.InterpolationMode =
-        System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+      e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
       // Prepare some shortcut variables for a better overview
       Point pos = Cursor.Position;
-      Rectangle scr = Screen.PrimaryScreen.Bounds; // The screen size
+      Rectangle scr = Screen.PrimaryScreen.Bounds;// The screen size
       Point zeroPoint = new Point(0, 0);
-
       #region Set the new display window location if we follow the cursor
-
       if (FollowCursor)
       {
-        Point loc = new Point(Cursor.Position.X - PixelRange * PixelSize,
-                              Cursor.Position.Y - PixelRange * PixelSize);
+        Point loc = new Point(Cursor.Position.X - PixelRange * PixelSize, Cursor.Position.Y - PixelRange * PixelSize);
         if (loc.X < 0)
         {
           loc = new Point(0, loc.Y);
@@ -691,18 +718,15 @@ namespace ToolStripCustomizer
         {
           loc = new Point(loc.X, Screen.PrimaryScreen.Bounds.Height - Height);
         }
-        _DisplayForm.Location = loc;
+        m_StationaryGlassForm.Location = loc;
       }
 
-      #endregion
+      #endregion Set the new display window location if we follow the cursor
 
       #region Make the screenshot
 
-      Rectangle shot = new Rectangle(zeroPoint,
-                                      new Size(Size.Width / PixelSize, Size.Height / PixelSize));
-      // The final screenshot size and position
-      Point defaultLocation = new Point(pos.X - PixelRange, pos.Y - PixelRange);
-      // The screenshot default location
+      Rectangle shot = new Rectangle(zeroPoint, new Size(Size.Width / PixelSize, Size.Height / PixelSize));// The final screenshot size and position
+      Point defaultLocation = new Point(pos.X - PixelRange, pos.Y - PixelRange);// The screenshot default location
       shot.Location = defaultLocation;
       if (shot.Location.X < 0)
       {
@@ -726,64 +750,56 @@ namespace ToolStripCustomizer
         // The area is going over the bottom screen border
         shot.Size = new Size(shot.Size.Width, shot.Location.Y - scr.Height);
       }
-
       if (shot.Width < 0 || shot.Height < 0)
         return;
 
-      Bitmap screenShot = new Bitmap(shot.Width, shot.Height,
-                                      System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-      // The screenshot imag;
+      Bitmap screenShot = new Bitmap(shot.Width, shot.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);// The screenshot imag;
       using (Graphics g = Graphics.FromImage(screenShot))
       {
-        bool makeScreenshot = !FollowCursor; // Make areal screenshot?
+        bool makeScreenshot = !FollowCursor;// Make areal screenshot?
         if (makeScreenshot)
         {
-          if (GlassForm != null)
+          if (MovingGlassForm != null)
           {
             // Only make a real screenshot if the moving glass is inactive
-            makeScreenshot &= !GlassForm.Visible;
+            makeScreenshot &= !MovingGlassForm.Visible;
           }
         }
         if (makeScreenshot)
         {
           // Make screenshot
-          g.CopyFromScreen(shot.Location, zeroPoint, shot.Size);
+          g.DrawImage(MakeScreenshot(shot), zeroPoint);
         }
-        else if (_ScreenShot != null)
+        else
         {
           // Copy from work screenshot
           if (FollowCursor)
           {
             // We're the moving glass
-            g.DrawImage(_ScreenShot, new Rectangle(zeroPoint, screenShot.Size), shot,
-                        GraphicsUnit.Pixel);
+            g.DrawImage(_ScreenShot, new Rectangle(zeroPoint, screenShot.Size), shot, GraphicsUnit.Pixel);
           }
           else
           {
-            // We're not the moving glass, but we should use the work screenshot 
-            // of the moving glass, 'cause if it's fully visible we'd copy the 
+            // We're not the moving glass, but we should use the work screenshot
+            // of the moving glass, 'cause if it's fully visible we'd copy the
             // moving glass display area...
-            g.DrawImage(GlassForm.MagnifyingGlass._ScreenShot,
-                        new Rectangle(zeroPoint, screenShot.Size), shot,
-                        GraphicsUnit.Pixel);
+            g.DrawImage(MovingGlassForm.MagnifyingGlass._ScreenShot, new Rectangle(zeroPoint, screenShot.Size), shot, GraphicsUnit.Pixel);
           }
         }
       }
-      #endregion
+
+      #endregion Make the screenshot
 
       #region Paint the screenshot scaled to the display
 
-      Rectangle display = new Rectangle(zeroPoint, Size);
-      // The rectangle within the display to show the screenshot
-      Size displaySize = new Size(shot.Width * PixelSize, shot.Height * PixelSize);
-      // The default magnified screenshot size
+      Rectangle display = new Rectangle(zeroPoint, Size);// The rectangle within the display to show the screenshot
+      Size displaySize = new Size(shot.Width * PixelSize, shot.Height * PixelSize);// The default magnified screenshot size
       if (defaultLocation.X < 0 || defaultLocation.X > scr.Width)
       {
         if (defaultLocation.X < 0)
         {
           // Display the screenshot with right align
-          display.Location = new Point(display.Width - displaySize.Width,
-                                        display.Location.Y);
+          display.Location = new Point(display.Width - displaySize.Width, display.Location.Y);
         }
         // Change the display area width to the width of the magnified screenshot
         display.Size = new Size(displaySize.Width, display.Size.Height);
@@ -793,8 +809,7 @@ namespace ToolStripCustomizer
         if (defaultLocation.Y < 0)
         {
           // Display the screenshot with bottom align
-          display.Location = new Point(display.Location.X,
-                                        display.Height - displaySize.Height);
+          display.Location = new Point(display.Location.X, display.Height - displaySize.Height);
         }
         // Change the display area height to the height of the magnified screenshot
         display.Size = new Size(display.Size.Width, displaySize.Height);
@@ -808,7 +823,7 @@ namespace ToolStripCustomizer
       e.Graphics.DrawImage(screenShot, display);
       screenShot.Dispose();
 
-      #endregion
+      #endregion Paint the screenshot scaled to the display
 
       #region Paint everything else to the display
 
@@ -816,12 +831,8 @@ namespace ToolStripCustomizer
       if (ShowPixel)
       {
         int xy = PixelSize * PixelRange;
-        e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Black)),
-                                  new Rectangle(new Point(xy, xy),
-                                                new Size(PixelSize, PixelSize)));
-        e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.White)),
-                                  new Rectangle(new Point(xy + 1, xy + 1),
-                                                new Size(PixelSize - 2, PixelSize - 2)));
+        e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Black)), new Rectangle(new Point(xy, xy), new Size(PixelSize, PixelSize)));
+        e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.White)), new Rectangle(new Point(xy + 1, xy + 1), new Size(PixelSize - 2, PixelSize - 2)));
       }
       // Show the cursor position coordinates on a fixed colored background rectangle in the display
       if (ShowPosition)
@@ -832,12 +843,10 @@ namespace ToolStripCustomizer
         posText = posText.Replace("#y", pos.Y.ToString());
         // Calculate where to paint
         Size textSize = e.Graphics.MeasureString(posText, Font).ToSize();
-        if (textSize.Width + 6 <= Width && textSize.Height + 6 <= Height)
-        // Continue only if the display is bigger or equal to the needed size
+        if (textSize.Width + 6 <= Width && textSize.Height + 6 <= Height)// Continue only if the display is bigger or equal to the needed size
         {
-          string posString = PosAlign.ToString().ToLower();
-          // The align as text (for less code)
-          Point posZero = Point.Empty; // The zero coordinates for the position display
+          string posString = PosAlign.ToString().ToLower();// The align as text (for less code)
+          Point posZero = Point.Empty;// The zero coordinates for the position display
           if (posString.StartsWith("top"))
           {
             posZero = new Point(0, 0);
@@ -848,27 +857,22 @@ namespace ToolStripCustomizer
           }
           if (posString.Contains("center"))
           {
-            posZero = new Point((int)Math.Ceiling((double)(Width - textSize.Width) / 2),
-                                posZero.Y);
+            posZero = new Point((int)Math.Ceiling((double)(Width - textSize.Width) / 2), posZero.Y);
           }
           else if (posString.Contains("right"))
           {
             posZero = new Point(Width - textSize.Width - 6, posZero.Y);
           }
           // Paint the text background rectangle and the text on it
-          e.Graphics.FillRectangle(new SolidBrush(BackColor),
-                                    new Rectangle(posZero,
-                                                  new Size(textSize.Width + 6,
-                                                          textSize.Height + 6)));
-          e.Graphics.DrawString(posText, Font, new SolidBrush(ForeColor),
-                                new PointF(posZero.X + 3, posZero.Y + 3));
+          e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(posZero, new Size(textSize.Width + 6, textSize.Height + 6)));
+          e.Graphics.DrawString(posText, Font, new SolidBrush(ForeColor), new PointF(posZero.X + 3, posZero.Y + 3));
         }
       }
 
-      #endregion
+      #endregion Paint everything else to the display
     }
 
-    #endregion
+    #endregion Painting
 
     /// <summary>
     /// Set a new size
@@ -912,7 +916,6 @@ namespace ToolStripCustomizer
           OnDisplayUpdated();
         }
       }
-      catch {}
       finally
       {
         // Restart the timer
@@ -939,26 +942,70 @@ namespace ToolStripCustomizer
       }
     }
 
+    private Bitmap MakeScreenshot(Rectangle rect)
+    {
+      // Capture an rectangle area from the screen
+      Bitmap bmp = new Bitmap(rect.Width, rect.Height);
+      using (Graphics g = Graphics.FromImage(bmp))
+      {
+        if (UseWin32Api)
+        {
+          // We're using BitBlt from the GDI API to copy alpha / layered screen regions also
+          IntPtr gHdc = g.GetHdc();
+          IntPtr dHdc = W32.GetDesktopWindow();
+          IntPtr wHdc = W32.GetWindowDC(dHdc);
+          W32.BitBlt(gHdc, 0, 0, bmp.Width, bmp.Height, wHdc, rect.X, rect.Y, W32.SRCCOPY | W32.CAPTUREBLT);
+          W32.ReleaseDC(dHdc, wHdc);
+          g.ReleaseHdc(gHdc);
+          gHdc = IntPtr.Zero;
+          dHdc = IntPtr.Zero;
+          wHdc = IntPtr.Zero;
+        }
+        else
+        {
+          // The standard C# screen capturing
+          g.CopyFromScreen(rect.Location, new Point(0, 0), bmp.Size);
+        }
+      }
+      return bmp;
+    }
+
     #region Moving glass related methods
+
+    internal void MakeScreenshot()
+    {
+      // Copy the current screen without this control for the following glass
+      OnBeforeMakingScreenshot();
+      bool visible = m_StationaryGlassForm.Visible;
+      if (visible)
+      {
+        m_StationaryGlassForm.Visible = false;
+      }
+      _ScreenShot = MakeScreenshot(new Rectangle(new Point(0, 0), Screen.PrimaryScreen.Bounds.Size));
+      if (visible)
+      {
+        m_StationaryGlassForm.Visible = true;
+      }
+      OnAfterMakingScreenshot();
+    }
 
     private void MagnifyingGlass_Click(object sender, EventArgs e)
     {
       // Show the moving glass
-      if (GlassForm != null && IsEnabled && UseMovingGlass)
+      if (MovingGlassForm != null && IsEnabled && UseMovingGlass)
       {
-        GlassForm.Show(MousePosition);
+        MovingGlassForm.Show(MousePosition);
       }
     }
 
     private void MagnifyingGlass_MouseWheel(object sender, MouseEventArgs e)
     {
       // Resize on mouse wheel actions
-      if (_DisplayForm != null && e.Delta != 0)
+      if (m_StationaryGlassForm != null && e.Delta != 0)
       {
         if (e.Delta > 0)
         {
-          if ((PixelRange + 1) * PixelRange * 2 <= Screen.PrimaryScreen.Bounds.Width &&
-              (PixelRange + 1) * PixelRange * 2 <= Screen.PrimaryScreen.Bounds.Height)
+          if ((PixelRange + 1) * PixelRange * 2 <= Screen.PrimaryScreen.Bounds.Width && (PixelRange + 1) * PixelRange * 2 <= Screen.PrimaryScreen.Bounds.Height)
           {
             PixelRange++;
             PixelSize += 2;
@@ -967,9 +1014,13 @@ namespace ToolStripCustomizer
         else
         {
           if (PixelRange - 1 >= 5)
+          {
             PixelRange--;
+          }
           if (PixelSize > 3)
+          {
             PixelSize -= 2;
+          }
         }
       }
     }
@@ -977,7 +1028,7 @@ namespace ToolStripCustomizer
     private void _MovingGlass_Click(object sender, EventArgs e)
     {
       // Hide the moving glass on mouse click
-      GlassForm.Hide();
+      MovingGlassForm.Hide();
     }
 
     private void MagnifyingGlass_DisplayUpdated(MagnifyingGlass sender)
@@ -985,25 +1036,6 @@ namespace ToolStripCustomizer
       // Refresh if the moving one has refreshed
       Invalidate();
       OnDisplayUpdated();
-    }
-
-    internal void MakeScreenshot()
-    {
-      // Copy the current screen without this control for the following glass
-      OnBeforeMakingScreenshot();
-      _ScreenShot = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
-                               Screen.PrimaryScreen.Bounds.Height);
-      using (Graphics g = Graphics.FromImage(_ScreenShot))
-      {
-        bool visible = _DisplayForm.Visible;
-        if (visible)
-          _DisplayForm.Visible = false;
-        g.CopyFromScreen(new Point(0, 0), new Point(0, 0), _ScreenShot.Size);
-        g.Flush();
-        if (visible)
-          _DisplayForm.Visible = true;
-      }
-      OnAfterMakingScreenshot();
     }
 
     /// <summary>
@@ -1025,32 +1057,83 @@ namespace ToolStripCustomizer
     private void OnBeforeMakingScreenshot()
     {
       if (BeforeMakingScreenshot != null)
+      {
         BeforeMakingScreenshot(this);
+      }
     }
 
     private void OnAfterMakingScreenshot()
     {
       if (AfterMakingScreenshot != null)
+      {
         AfterMakingScreenshot(this);
+      }
     }
 
-    #endregion
+    #endregion Moving glass related methods
 
-    private void InitializeComponent()
+    #region Windows API
+
+    /// <summary>
+    /// This private class is holding all used Win32 API calls and constants
+    /// </summary>
+    private static class W32
     {
-      this.SuspendLayout();
-      // 
-      // MagnifyingGlass
-      // 
-      this.BackColor = System.Drawing.Color.FromArgb(45,45,48);
-      this.Name = "MagnifyingGlass";
-      this.ResumeLayout(false);
+      /// <summary>
+      /// Copy the source with BitBlt
+      /// </summary>
+      public const int SRCCOPY = 0x00CC0020;
+
+      /// <summary>
+      /// Copy alpha / layered with BitBlt
+      /// </summary>
+      public const int CAPTUREBLT = 0x40000000;
+
+      /// <summary>
+      /// BitBlt method from the GDI API
+      /// </summary>
+      /// <param name="hDestDC">Destination DC handle</param>
+      /// <param name="x">Destination x</param>
+      /// <param name="y">Destination y</param>
+      /// <param name="nWidth">Destination width</param>
+      /// <param name="nHeight">Destination height</param>
+      /// <param name="hSrcDC">Source DC handle</param>
+      /// <param name="xSrc">Source x</param>
+      /// <param name="ySrc">Source y</param>
+      /// <param name="dwRop">Options</param>
+      /// <returns>Result</returns>
+      [DllImport("gdi32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = false)]
+      public static extern UInt64 BitBlt(IntPtr hDestDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, System.Int32 dwRop);
+
+      /// <summary>
+      /// Get the desktop window handle
+      /// </summary>
+      /// <returns>Desktop window handle</returns>
+      [DllImport("user32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = false)]
+      public static extern IntPtr GetDesktopWindow();
+
+      /// <summary>
+      /// Get a window DC
+      /// </summary>
+      /// <param name="hwnd">Window handle</param>
+      /// <returns>Window DC</returns>
+      [DllImport("user32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = false)]
+      public static extern IntPtr GetWindowDC(IntPtr hwnd);
+
+      /// <summary>
+      /// Release a DC
+      /// </summary>
+      /// <param name="hwnd">Window handle</param>
+      /// <param name="dc">Window DC</param>
+      /// <returns>Result</returns>
+      [DllImport("user32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = false)]
+      public static extern int ReleaseDC(IntPtr hwnd, IntPtr dc);
     }
 
-    private void magnifyingGlass1_DisplayUpdated(MagnifyingGlass sender) { }
+    #endregion Windows API
   }
 
-  #endregion
+  #endregion -- MagnifyingGlass User Control --
 
   #region -- MagnifyingGlassForm --
 
@@ -1072,7 +1155,7 @@ namespace ToolStripCustomizer
       MagnifyingGlass.BackColor = Color.Black;
       MagnifyingGlass.ForeColor = Color.White;
       MagnifyingGlass.UpdateTimer.Interval = 50;
-      MagnifyingGlass._DisplayForm = this;
+      MagnifyingGlass.m_StationaryGlassForm = this;
       MagnifyingGlass.FollowCursor = true;
       MagnifyingGlass.BorderStyle = BorderStyle.FixedSingle;
       MagnifyingGlass.Resize += new EventHandler(MagnifyingGlass_Resize);
@@ -1086,7 +1169,12 @@ namespace ToolStripCustomizer
     /// Show the window and enable the timer
     /// </summary>
     /// <param name="mousePosition"></param>
-    public new void Show(Point mousePosition)
+    public new void Show()
+    {
+      Show(new Point(0, 0));
+    }
+
+    public void Show(Point mousePosition)
     {
       MagnifyingGlass.MakeScreenshot();
       Cursor.Position = mousePosition;
@@ -1120,11 +1208,9 @@ namespace ToolStripCustomizer
     /// The magnifying glass object
     /// </summary>
     [Description("The magnifying glass object")]
-    public MagnifyingGlass MagnifyingGlass
-    {
-      get { return m_MagnifyingGlass; }
-    }
+    public MagnifyingGlass MagnifyingGlass { get { return m_MagnifyingGlass; } }
+
   }
 
-  #endregion
+  #endregion -- MagnifyingGlassForm --
 }
