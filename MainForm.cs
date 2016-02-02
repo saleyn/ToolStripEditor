@@ -6,17 +6,15 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Media;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
 using ToolStripCustomizer.ColorTables;
 using ToolStripCustomizer.Properties;
 
 namespace ToolStripCustomizer
 {
-    partial class MainForm : BaseForm
+  partial class MainForm : BaseForm
     {
         public static readonly List<PresetColorTable> Presets;
         public static readonly CustomToolStripRenderer Renderer = new CustomToolStripRenderer();

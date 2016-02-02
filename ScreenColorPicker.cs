@@ -33,7 +33,9 @@ namespace ToolStripCustomizer
         new MagnifyingGlass.MakingScreenshotDelegate(MagnifyingGlass_AfterMakingScreenshot);
 
       SelectedColor = panel2.BackColor;
-      m_MouseHook = new GlobalHook(this, p => this.SelectColor(), true);
+      m_MouseHook = new GlobalHook(
+        p => !btnOk.Bounds.Contains(p) && !btnCancel.Bounds.Contains(p),
+        p => this.SelectColor(), true);
     }
 
     protected override void OnClosed(EventArgs e)
@@ -604,22 +606,25 @@ namespace ToolStripCustomizer
                 // Create a new screen image
                 MakeScreenshot();
               }
-              if (FollowCursor)
+              if (_ScreenShot != null)
               {
-                // We're the moving glass
-                g.DrawImage(_ScreenShot, new Rectangle(new Point(0, 0), new Size(1, 1)),
-                            new Rectangle(Cursor.Position, new Size(1, 1)),
-                            GraphicsUnit.Pixel);
+                if (FollowCursor)
+                {
+                  // We're the moving glass
+                  g.DrawImage(_ScreenShot, new Rectangle(new Point(0, 0), new Size(1, 1)),
+                              new Rectangle(Cursor.Position, new Size(1, 1)),
+                              GraphicsUnit.Pixel);
+                }
+                else if (GlassForm.MagnifyingGlass._ScreenShot != null)
+                {
+                  // Use the moving glasses screenshot
+                  g.DrawImage(GlassForm.MagnifyingGlass._ScreenShot,
+                              new Rectangle(new Point(0, 0), new Size(1, 1)),
+                              new Rectangle(Cursor.Position, new Size(1, 1)),
+                              GraphicsUnit.Pixel);
+                }
               }
-              else
-              {
-                // Use the moving glasses screenshot
-                g.DrawImage(GlassForm.MagnifyingGlass._ScreenShot,
-                            new Rectangle(new Point(0, 0), new Size(1, 1)),
-                            new Rectangle(Cursor.Position, new Size(1, 1)),
-                            GraphicsUnit.Pixel);
-              }
-              if (createScreenshot)
+              if (createScreenshot && _ScreenShot != null)
               {
                 // Destroy the screenshot if we only needed to create one for this
                 _ScreenShot.Dispose();
@@ -628,6 +633,10 @@ namespace ToolStripCustomizer
           }
           // Return the pixel color
           return bmp.GetPixel(0, 0);
+        }
+        catch
+        {
+          return this.BackColor;
         }
         finally
         {
@@ -695,7 +704,7 @@ namespace ToolStripCustomizer
       #region Make the screenshot
 
       Rectangle shot = new Rectangle(zeroPoint,
-                                     new Size(Size.Width / PixelSize, Size.Height / PixelSize));
+                                      new Size(Size.Width / PixelSize, Size.Height / PixelSize));
       // The final screenshot size and position
       Point defaultLocation = new Point(pos.X - PixelRange, pos.Y - PixelRange);
       // The screenshot default location
@@ -727,7 +736,7 @@ namespace ToolStripCustomizer
         return;
 
       Bitmap screenShot = new Bitmap(shot.Width, shot.Height,
-                                     System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                                      System.Drawing.Imaging.PixelFormat.Format24bppRgb);
       // The screenshot imag;
       using (Graphics g = Graphics.FromImage(screenShot))
       {
@@ -745,7 +754,7 @@ namespace ToolStripCustomizer
           // Make screenshot
           g.CopyFromScreen(shot.Location, zeroPoint, shot.Size);
         }
-        else
+        else if (_ScreenShot != null)
         {
           // Copy from work screenshot
           if (FollowCursor)
@@ -765,7 +774,6 @@ namespace ToolStripCustomizer
           }
         }
       }
-
       #endregion
 
       #region Paint the screenshot scaled to the display
@@ -780,7 +788,7 @@ namespace ToolStripCustomizer
         {
           // Display the screenshot with right align
           display.Location = new Point(display.Width - displaySize.Width,
-                                       display.Location.Y);
+                                        display.Location.Y);
         }
         // Change the display area width to the width of the magnified screenshot
         display.Size = new Size(displaySize.Width, display.Size.Height);
@@ -791,7 +799,7 @@ namespace ToolStripCustomizer
         {
           // Display the screenshot with bottom align
           display.Location = new Point(display.Location.X,
-                                       display.Height - displaySize.Height);
+                                        display.Height - displaySize.Height);
         }
         // Change the display area height to the height of the magnified screenshot
         display.Size = new Size(display.Size.Width, displaySize.Height);
@@ -814,11 +822,11 @@ namespace ToolStripCustomizer
       {
         int xy = PixelSize * PixelRange;
         e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Black)),
-                                 new Rectangle(new Point(xy, xy),
-                                               new Size(PixelSize, PixelSize)));
+                                  new Rectangle(new Point(xy, xy),
+                                                new Size(PixelSize, PixelSize)));
         e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.White)),
-                                 new Rectangle(new Point(xy + 1, xy + 1),
-                                               new Size(PixelSize - 2, PixelSize - 2)));
+                                  new Rectangle(new Point(xy + 1, xy + 1),
+                                                new Size(PixelSize - 2, PixelSize - 2)));
       }
       // Show the cursor position coordinates on a fixed colored background rectangle in the display
       if (ShowPosition)
@@ -854,8 +862,8 @@ namespace ToolStripCustomizer
           }
           // Paint the text background rectangle and the text on it
           e.Graphics.FillRectangle(new SolidBrush(BackColor),
-                                   new Rectangle(posZero,
-                                                 new Size(textSize.Width + 6,
+                                    new Rectangle(posZero,
+                                                  new Size(textSize.Width + 6,
                                                           textSize.Height + 6)));
           e.Graphics.DrawString(posText, Font, new SolidBrush(ForeColor),
                                 new PointF(posZero.X + 3, posZero.Y + 3));
@@ -909,6 +917,7 @@ namespace ToolStripCustomizer
           OnDisplayUpdated();
         }
       }
+      catch {}
       finally
       {
         // Restart the timer
@@ -1098,8 +1107,11 @@ namespace ToolStripCustomizer
       base.Hide();
       MagnifyingGlass.UpdateTimer.Stop();
       Cursor.Show();
-      MagnifyingGlass._ScreenShot.Dispose();
-      MagnifyingGlass._ScreenShot = null;
+      if (MagnifyingGlass._ScreenShot == null)
+      {
+        MagnifyingGlass._ScreenShot.Dispose();
+        MagnifyingGlass._ScreenShot = null;
+      }
     }
 
     private void MagnifyingGlass_Resize(object sender, EventArgs e)
@@ -1124,9 +1136,9 @@ namespace ToolStripCustomizer
 
   internal class GlobalHook : IDisposable
   {
-    public GlobalHook(Control parent, ClickAction action, bool captureClick = true)
+    public GlobalHook(Func<Point,bool> canCapture, ClickAction action, bool captureClick = true)
     {
-      m_Parent = parent;
+      m_CanCapture = canCapture;
       m_HookID = SetHook(this.HookCallback);
       m_OnClick += action;
       m_CaptureClick = captureClick;
@@ -1138,7 +1150,7 @@ namespace ToolStripCustomizer
     private event ClickAction m_OnClick;
     private bool              m_CaptureClick;
     private IntPtr            m_HookID = IntPtr.Zero;
-    private Control           m_Parent;
+    private Func<Point, bool> m_CanCapture;
 
     private static IntPtr SetHook(LowLevelMouseProc proc)
     {
@@ -1157,11 +1169,11 @@ namespace ToolStripCustomizer
       {
         var hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof (MSLLHOOKSTRUCT));
         var point      = new Point(hookStruct.pt.x, hookStruct.pt.y);
-        if (!m_Parent.Bounds.Contains(point))
+        if (m_CanCapture != null && m_CanCapture(point))
         {
           m_OnClick(point);
-          if (m_CaptureClick)
-            return new IntPtr(-1);
+          //if (m_CaptureClick)
+          //  return new IntPtr(-1);
         }
       }
       return CallNextHookEx(m_HookID, nCode, wParam, lParam);
