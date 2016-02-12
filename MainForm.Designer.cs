@@ -111,11 +111,12 @@ namespace ToolStripCustomizer
       this.selectAllPopupItem = new System.Windows.Forms.ToolStripMenuItem();
       this.fromKnownColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.alphaMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.screenColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.colorDialog = new System.Windows.Forms.ColorDialog();
       this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
       this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
       this.searchWorker = new System.ComponentModel.BackgroundWorker();
-      this.screenColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.miExportColors = new System.Windows.Forms.ToolStripMenuItem();
       toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
       toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
       toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -593,6 +594,7 @@ namespace ToolStripCustomizer
             this.openMenuItem,
             toolStripSeparator,
             this.saveMenuItem,
+            this.miExportColors,
             toolStripSeparator1,
             this.exitMenuItem});
       this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -833,7 +835,7 @@ namespace ToolStripCustomizer
             resetMenuItem,
             clearMenuItem});
       this.rowContextMenu.Name = "rowContextMenu";
-      this.rowContextMenu.Size = new System.Drawing.Size(165, 214);
+      this.rowContextMenu.Size = new System.Drawing.Size(165, 192);
       this.rowContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.RowContextMenuOpening);
       // 
       // copyPopupItem
@@ -891,6 +893,13 @@ namespace ToolStripCustomizer
       this.alphaMenuItem.Size = new System.Drawing.Size(164, 22);
       this.alphaMenuItem.Text = "Alp&ha";
       // 
+      // screenColorMenuItem
+      // 
+      this.screenColorMenuItem.Name = "screenColorMenuItem";
+      this.screenColorMenuItem.Size = new System.Drawing.Size(164, 22);
+      this.screenColorMenuItem.Text = "Scree&n Color";
+      this.screenColorMenuItem.Click += new System.EventHandler(this.screenColorMenuItem_Click);
+      // 
       // colorDialog
       // 
       this.colorDialog.FullOpen = true;
@@ -912,12 +921,12 @@ namespace ToolStripCustomizer
       this.searchWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.SearchWorkerDoWork);
       this.searchWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.OnSearchWorkerProgressChanged);
       // 
-      // screenColorMenuItem
+      // miExportColors
       // 
-      this.screenColorMenuItem.Name = "screenColorMenuItem";
-      this.screenColorMenuItem.Size = new System.Drawing.Size(164, 22);
-      this.screenColorMenuItem.Text = "Scree&n Color";
-      this.screenColorMenuItem.Click += new System.EventHandler(this.screenColorMenuItem_Click);
+      this.miExportColors.Name = "miExportColors";
+      this.miExportColors.Size = new System.Drawing.Size(164, 22);
+      this.miExportColors.Text = "Ex&port Colors";
+      this.miExportColors.Click += new System.EventHandler(this.miExportColors_Click);
       // 
       // MainForm
       // 
@@ -1010,6 +1019,7 @@ namespace ToolStripCustomizer
         private System.Windows.Forms.ToolStripMenuItem colorAdjustmentToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
     private System.Windows.Forms.ToolStripMenuItem screenColorMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem miExportColors;
   }
 }
 

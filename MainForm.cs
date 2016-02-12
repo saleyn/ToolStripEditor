@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -742,6 +743,35 @@ namespace ToolStripCustomizer
       finally { 
         this.WindowState = FormWindowState.Normal;
         this.Activate();
+      }
+    }
+
+    private void miExportColors_Click(object sender, EventArgs e)
+    {
+      var dict = new Dictionary<Color, string>();
+
+      foreach (DataGridViewRow row in gridView.SelectedRows)
+      {
+        Color color = GetRowColor(row.Index);
+        if (dict.ContainsKey(color)) continue;
+        var value   = row.Cells[ColorGroupColumnName].Value.ToString();
+        dict[color] = value;
+      }
+
+      if (dict.Count > 0)
+      {
+        var list =
+          dict.Select(
+            pair => $"TS-{pair.Value},{pair.Key.A},{pair.Key.R},{pair.Key.G},{pair.Key.B}")
+              .ToList();
+        list.Sort();
+        Clipboard.Clear();
+        try { Clipboard.SetText(string.Join("\n", list.ToArray())); }
+        catch (Exception err)
+        {
+          MessageBox.Show($"Export operation couldn't be completed!\n\n{err.Message}", "Error",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
       }
     }
   }
